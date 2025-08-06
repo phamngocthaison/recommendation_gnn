@@ -60,11 +60,22 @@ def demo_recommendations():
     
     # Load model
     model = LightGCN(num_users, num_items, norm_adj, embed_dim=64, n_layers=3)
-    try:
-        model.load_state_dict(torch.load("lightgcn_movielens.pt"))
-        print("Model loaded successfully!")
-    except FileNotFoundError:
-        print("Error: Model file not found. Please run training first.")
+    
+    # Try to load GPU model first, then CPU model
+    model_files = ["lightgcn_movielens_gpu.pt", "lightgcn_movielens.pt"]
+    model_loaded = False
+    
+    for model_file in model_files:
+        try:
+            model.load_state_dict(torch.load(model_file))
+            print(f"Model loaded successfully from {model_file}!")
+            model_loaded = True
+            break
+        except FileNotFoundError:
+            continue
+    
+    if not model_loaded:
+        print("Error: No model file found. Please run training first.")
         return
     
     # Load movie information
@@ -121,10 +132,22 @@ def interactive_recommendations():
     
     # Load model
     model = LightGCN(num_users, num_items, norm_adj, embed_dim=64, n_layers=3)
-    try:
-        model.load_state_dict(torch.load("lightgcn_movielens.pt"))
-    except FileNotFoundError:
-        print("Error: Model file not found. Please run training first.")
+    
+    # Try to load GPU model first, then CPU model
+    model_files = ["lightgcn_movielens_gpu.pt", "lightgcn_movielens.pt"]
+    model_loaded = False
+    
+    for model_file in model_files:
+        try:
+            model.load_state_dict(torch.load(model_file))
+            print(f"Model loaded successfully from {model_file}!")
+            model_loaded = True
+            break
+        except FileNotFoundError:
+            continue
+    
+    if not model_loaded:
+        print("Error: No model file found. Please run training first.")
         return
     
     # Load movie information
@@ -163,12 +186,18 @@ def main():
     print("LightGCN Movie Recommendation System")
     print("====================================")
     
-    # Check if model exists
-    try:
-        torch.load("lightgcn_movielens.pt")
-        model_exists = True
-    except FileNotFoundError:
-        model_exists = False
+    # Check if model exists (try both GPU and CPU models)
+    model_exists = False
+    for model_file in ["lightgcn_movielens_gpu.pt", "lightgcn_movielens.pt"]:
+        try:
+            torch.load(model_file)
+            model_exists = True
+            print(f"Found model: {model_file}")
+            break
+        except FileNotFoundError:
+            continue
+    
+    if not model_exists:
         print("Warning: No trained model found. Please run training first.")
         return
     

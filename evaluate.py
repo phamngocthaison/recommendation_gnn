@@ -83,7 +83,7 @@ def get_recommendations(model, user_id, user_items, K=10):
     # Get top-K items
     top_k_scores, top_k_indices = torch.topk(scores, K)
     
-    return top_k_indices.cpu().numpy(), top_k_scores.cpu().numpy()
+    return top_k_indices.detach().cpu().numpy(), top_k_scores.detach().cpu().numpy()
 
 
 def main():

@@ -25,10 +25,19 @@ class LightGCN(nn.Module):
         
         # Dropout layer
         self.dropout_layer = nn.Dropout(dropout)
+    
+    def to(self, device):
+        """Move model to device and also move adjacency matrix"""
+        super().to(device)
+        if hasattr(self, 'adj'):
+            self.adj = self.adj.to(device)
+        return self
 
     def _convert_sp_mat_to_tensor(self, mat):
         coo = mat.tocoo()
-        indices = torch.LongTensor([coo.row, coo.col])
+        # Convert to numpy array first to avoid the warning
+        indices = np.vstack([coo.row, coo.col])
+        indices = torch.LongTensor(indices)
         values = torch.FloatTensor(coo.data)
         return torch.sparse_coo_tensor(indices, values, coo.shape)
 

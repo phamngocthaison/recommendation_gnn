@@ -62,7 +62,10 @@ def build_adj_matrix(user_item_pairs, num_users, num_items):
     mat = sp.coo_matrix((data, (rows, cols)), shape=(num_users + num_items, num_users + num_items))
 
     # Normalize adjacency matrix
-    deg = sp.diags(np.power(np.array(mat.sum(1)), -0.5).flatten())
+    deg_sum = np.array(mat.sum(1)).flatten()
+    # Handle zero degree nodes to avoid divide by zero
+    deg_sum[deg_sum == 0] = 1.0
+    deg = sp.diags(np.power(deg_sum, -0.5))
     norm_adj = deg @ mat @ deg
     return norm_adj.tocoo()
 
