@@ -15,20 +15,20 @@ sns.set_palette("husl")
 def load_data():
     """Load MovieLens data and movie information"""
     # Load processed data
-    train_df = pd.read_csv('movielens_train.csv')
+    train_df = pd.read_csv('../movielens_train.csv')
     
     # Load movie information
     try:
-        movies_df = pd.read_csv('ml-1m/movies.dat', sep='::', engine='python',
-                               names=['movie_id', 'title', 'genres'], encoding='latin-1')
+        movies_df = pd.read_csv('../ml-1m/movies.dat', sep='::', engine='python',
+                                names=['movie_id', 'title', 'genres'], encoding='latin-1')
     except:
         print("Warning: Could not load movie information")
         movies_df = None
     
     # Load ID mappings
-    with open('user2id.json', 'r') as f:
+    with open('../user2id.json', 'r') as f:
         user2id = json.load(f)
-    with open('item2id.json', 'r') as f:
+    with open('../item2id.json', 'r') as f:
         item2id = json.load(f)
     
     return train_df, movies_df, user2id, item2id

@@ -8,9 +8,9 @@ def debug_movie_mapping():
     print("=" * 50)
     
     # Load ID mappings
-    with open('user2id.json', 'r') as f:
+    with open('../user2id.json', 'r') as f:
         user2id = json.load(f)
-    with open('item2id.json', 'r') as f:
+    with open('../item2id.json', 'r') as f:
         item2id = json.load(f)
     
     print(f"📊 Total users in user2id: {len(user2id)}")
@@ -18,8 +18,8 @@ def debug_movie_mapping():
     
     # Load movie information
     try:
-        movies_df = pd.read_csv('ml-1m/movies.dat', sep='::', engine='python',
-                               names=['movie_id', 'title', 'genres'], encoding='latin-1')
+        movies_df = pd.read_csv('../ml-1m/movies.dat', sep='::', engine='python',
+                                names=['movie_id', 'title', 'genres'], encoding='latin-1')
         
         # Parse title and year
         def extract_title_year(title):
