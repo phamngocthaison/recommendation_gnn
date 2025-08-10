@@ -6,11 +6,11 @@ from collections import defaultdict
 import json
 import random
 from matplotlib.patches import FancyBboxPatch
-import seaborn as sns
 
 # Set style
 plt.style.use('default')
-sns.set_palette("husl")
+plt.rcParams['figure.figsize'] = (12, 8)
+plt.rcParams['font.size'] = 10
 
 def load_data():
     """Load MovieLens data and movie information"""
@@ -20,7 +20,7 @@ def load_data():
     # Load movie information
     try:
         movies_df = pd.read_csv('../ml-1m/movies.dat', sep='::', engine='python',
-                                names=['movie_id', 'title', 'genres'], encoding='latin-1')
+                               names=['movie_id', 'title', 'genres'], encoding='latin-1')
     except:
         print("Warning: Could not load movie information")
         movies_df = None
@@ -171,7 +171,7 @@ def visualize_graph(G, top_users, top_items, movies_df, item2id, save_path="movi
     return popular_items
 
 def create_interaction_heatmap(train_df, top_users, top_items, save_path="interaction_heatmap.png"):
-    """Create a heatmap of user-item interactions"""
+    """Create a heatmap of user-item interactions using matplotlib"""
     # Create interaction matrix
     interaction_matrix = np.zeros((len(top_users), len(top_items)))
     
@@ -182,16 +182,28 @@ def create_interaction_heatmap(train_df, top_users, top_items, save_path="intera
                 interaction_matrix[i, j] = 1
     
     plt.figure(figsize=(15, 10))
-    sns.heatmap(interaction_matrix, cmap='Blues', cbar_kws={'label': 'Interaction'})
+    
+    # Use built-in colormap
+    im = plt.imshow(interaction_matrix, cmap='Blues', aspect='auto', interpolation='nearest')
+    
+    # Add colorbar
+    cbar = plt.colorbar(im)
+    cbar.set_label('Interaction', rotation=270, labelpad=15)
+    
+    # Set labels
     plt.title('User-Movie Interaction Heatmap\n(Top Users vs Top Movies)', fontsize=16, fontweight='bold')
     plt.xlabel('Movies', fontsize=12)
     plt.ylabel('Users', fontsize=12)
+    
+    # Add grid
+    plt.grid(True, alpha=0.3)
+    
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.show()
 
 def create_statistics_plots(train_df, save_path_prefix="statistics"):
-    """Create various statistics plots"""
+    """Create various statistics plots using matplotlib"""
     # User interaction distribution
     user_counts = train_df['user_id'].value_counts()
     item_counts = train_df['item_id'].value_counts()
@@ -200,33 +212,44 @@ def create_statistics_plots(train_df, save_path_prefix="statistics"):
     
     # User interaction distribution
     axes[0, 0].hist(user_counts.values, bins=50, alpha=0.7, color='red', edgecolor='black')
-    axes[0, 0].set_title('User Interaction Distribution')
+    axes[0, 0].set_title('User Interaction Distribution', fontweight='bold')
     axes[0, 0].set_xlabel('Number of Movies Rated')
     axes[0, 0].set_ylabel('Number of Users')
     axes[0, 0].grid(True, alpha=0.3)
     
     # Item interaction distribution
     axes[0, 1].hist(item_counts.values, bins=50, alpha=0.7, color='blue', edgecolor='black')
-    axes[0, 1].set_title('Movie Interaction Distribution')
+    axes[0, 1].set_title('Movie Interaction Distribution', fontweight='bold')
     axes[0, 1].set_xlabel('Number of Users Rating')
     axes[0, 1].set_ylabel('Number of Movies')
     axes[0, 1].grid(True, alpha=0.3)
     
     # Top users
     top_users = user_counts.head(20)
-    axes[1, 0].bar(range(len(top_users)), top_users.values, color='red', alpha=0.7)
-    axes[1, 0].set_title('Top 20 Most Active Users')
+    bars1 = axes[1, 0].bar(range(len(top_users)), top_users.values, color='red', alpha=0.7, edgecolor='darkred')
+    axes[1, 0].set_title('Top 20 Most Active Users', fontweight='bold')
     axes[1, 0].set_xlabel('User Rank')
     axes[1, 0].set_ylabel('Number of Movies Rated')
     axes[1, 0].grid(True, alpha=0.3)
     
     # Top items
     top_items = item_counts.head(20)
-    axes[1, 1].bar(range(len(top_items)), top_items.values, color='blue', alpha=0.7)
-    axes[1, 1].set_title('Top 20 Most Popular Movies')
+    bars2 = axes[1, 1].bar(range(len(top_items)), top_items.values, color='blue', alpha=0.7, edgecolor='darkblue')
+    axes[1, 1].set_title('Top 20 Most Popular Movies', fontweight='bold')
     axes[1, 1].set_xlabel('Movie Rank')
     axes[1, 1].set_ylabel('Number of Users Rating')
     axes[1, 1].grid(True, alpha=0.3)
+    
+    # Add value labels on bars
+    for bar in bars1:
+        height = bar.get_height()
+        axes[1, 0].text(bar.get_x() + bar.get_width()/2., height + 1,
+                        f'{int(height)}', ha='center', va='bottom', fontsize=8)
+    
+    for bar in bars2:
+        height = bar.get_height()
+        axes[1, 1].text(bar.get_x() + bar.get_width()/2., height + 1,
+                        f'{int(height)}', ha='center', va='bottom', fontsize=8)
     
     plt.tight_layout()
     plt.savefig(f"{save_path_prefix}_plots.png", dpi=300, bbox_inches='tight')
