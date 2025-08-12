@@ -1,0 +1,18 @@
+LIGHTGCN EVALUATION SUMMARY
+==================================================
+
+MODEL PERFORMANCE:
+--------------------
+recall@5: 0.0205
+ndcg@5: 0.0129
+precision@5: 0.0041
+recall@10: 0.0399
+ndcg@10: 0.0191
+precision@10: 0.0040
+recall@20: 0.0721
+ndcg@20: 0.0271
+precision@20: 0.0036
+
+TIMESTAMP: 2025-08-11 17:37:38
+
+NOTE: Evaluation was performed using the existing evaluate.py script

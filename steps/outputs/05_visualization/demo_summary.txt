@@ -1,0 +1,23 @@
+LIGHTGCN DEMO & VISUALIZATION SUMMARY
+==================================================
+
+MODEL PERFORMANCE:
+--------------------
+recall@5: 0.0205
+ndcg@5: 0.0129
+precision@5: 0.0041
+recall@10: 0.0399
+ndcg@10: 0.0191
+precision@10: 0.0040
+recall@20: 0.0721
+ndcg@20: 0.0271
+precision@20: 0.0036
+
+PERFORMANCE SUMMARY:
+--------------------
+Best Recall@K: K=20
+Best NDCG@K: K=20
+Best Precision@K: K=5
+Overall Assessment: Poor performance - needs improvement
+
+TIMESTAMP: 2025-08-10 22:18:25

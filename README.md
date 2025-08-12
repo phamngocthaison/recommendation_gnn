@@ -66,7 +66,13 @@ recommendation_gnn/
 ├── 🏋️ train.py                     # CPU training script
 ├── ⚡ train_gpu.py                 # GPU training script (optimized)
 ├── 🎮 demo.py                      # Command-line demo
-├── 🔧 1. pre-processing.py         # Data preprocessing
+├── 🔧 steps/                       # Step-by-step pipeline
+│   ├── 01_data_preprocessing.py    # Step 1: Data preprocessing
+│   ├── 02_build_adjacency_matrix.py # Step 2: Build adjacency matrix
+│   ├── 03_train_lightgcn.py       # Step 3: Train LightGCN model
+│   ├── 04_evaluate_model.py        # Step 4: Evaluate model
+│   └── 05_demo_visualization.py    # Step 5: Demo & visualization
+├── 🚀 run_pipeline.py              # Interactive pipeline runner
 ├── 📊 movielens_train.csv          # Training data
 ├── 📊 movielens_test.csv           # Test data
 ├── 🗂️ user2id.json                 # User ID mappings
@@ -121,46 +127,109 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 ## 🚀 Quick Start
 
-### 1. Preprocess Data
+> 📖 **Xem [QUICK_START.md](QUICK_START.md) để hướng dẫn chi tiết và troubleshooting!**
+
+### 🚀 Option 1: Complete Pipeline (Recommended)
 ```bash
+python main.py
+```
+This will run the entire pipeline automatically from start to finish!
+
+### 🔧 Option 2: Interactive Step-by-Step Pipeline
+```bash
+python run_pipeline.py
+```
+Chạy từng bước với xác nhận từng bước, kiểm tra output files.
+
+### 🔧 Option 3: Manual Step-by-Step Pipeline
+```bash
+# Step 1: Preprocess Data
+python steps/01_data_preprocessing.py
+
+# Step 2: Build Adjacency Matrix
+python steps/02_build_adjacency_matrix.py
+
+# Step 3: Train LightGCN Model
+python steps/03_train_lightgcn.py
+
+# Step 4: Evaluate Model
+python steps/04_evaluate_model.py
+
+# Step 5: Demo & Visualization
+python steps/05_demo_visualization.py
+```
+
+### 🎯 Option 3: Individual Scripts
+```bash
+# Legacy data preprocessing
 python "1. pre-processing.py"
+
+# Direct training
+python train_gpu.py  # GPU (faster)
+python train.py      # CPU
+
+# Evaluation and demo
+python evaluate.py
+python demo.py
 ```
 
-### 2. Train the Model
-
-#### GPU Training (Recommended)
-```bash
-python train_gpu.py
-```
-
-#### CPU Training
-```bash
-python train.py
-```
-
-### 3. Run Web App Demo
+### 🌐 Web App Demo
 ```bash
 python run_webapp.py
 ```
 Then open: http://localhost:8501
 
-### 4. Command-line Demo
-```bash
-python demo.py
-```
-
 ## 📖 Usage
 
-### Data Preprocessing
+### 🚀 Complete Pipeline (Recommended)
 ```bash
-python "1. pre-processing.py"
+python main.py
+```
+Runs the complete pipeline from data preprocessing to evaluation:
+1. **Data Preprocessing**: Load and process MovieLens-1M dataset
+2. **Build Adjacency Matrix**: Create normalized graph structure
+3. **Train LightGCN Model**: Train with GPU acceleration
+4. **Evaluate Model**: Calculate performance metrics
+5. **Demo & Visualization**: Interactive exploration
+
+### 🔧 Step-by-Step Pipeline
+
+#### Interactive Runner (Recommended)
+```bash
+python run_pipeline.py          # Chạy từng bước với xác nhận
+python run_pipeline.py --auto   # Chạy tự động tất cả các bước
+```
+
+#### Manual Execution
+```bash
+# Step 1: Data Preprocessing
+python steps/01_data_preprocessing.py
+
+# Step 2: Build Adjacency Matrix  
+python steps/02_build_adjacency_matrix.py
+
+# Step 3: Train LightGCN Model
+python steps/03_train_lightgcn.py
+
+# Step 4: Evaluate Model
+python steps/04_evaluate_model.py
+
+# Step 5: Demo & Visualization
+python steps/05_demo_visualization.py
+```
+
+### 🎯 Individual Scripts
+
+#### Data Preprocessing
+```bash
+python "1. pre-processing.py"  # Legacy script
 ```
 - Loads MovieLens-1M dataset
 - Creates user/item ID mappings
 - Splits data into train/test sets
 - Generates CSV files for training
 
-### Model Training
+#### Model Training
 
 #### GPU Training (Faster)
 ```bash
@@ -180,7 +249,7 @@ python train.py
 - Suitable for systems without GPU
 - Same functionality as GPU version
 
-### Model Evaluation
+#### Model Evaluation
 ```bash
 python evaluate.py
 ```
@@ -189,7 +258,7 @@ Evaluates the trained model using:
 - NDCG@K (K=5,10,20)
 - Precision@K (K=5,10,20)
 
-### Interactive Demo
+#### Interactive Demo
 ```bash
 python demo.py
 ```

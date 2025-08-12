@@ -46,7 +46,6 @@ train_df.to_csv("movielens_train.csv", index=False)
 test_df.to_csv("movielens_test.csv", index=False)
 user2id = {int(u): int(idx) for idx, u in enumerate(df['user_id'].unique())}
 item2id = {int(i): int(idx) for idx, i in enumerate(df['item_id'].unique())}
-# Nếu cần lưu map ID gốc:
 with open('user2id.json', 'w') as f:
     json.dump(user2id, f)
 with open('item2id.json', 'w') as f:
