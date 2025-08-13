@@ -12,10 +12,7 @@ Mục đích:
 Output:
 - Adjacency matrix đã chuẩn hóa
 - Data loaders cho training và validation
-- Thống kê về graph structure
 
-Paper reference: LightGCN: Simplifying and Powering Graph Convolution Network 
-for Recommendation (He et al., SIGIR 2020)
 """
 
 import pandas as pd
@@ -152,7 +149,6 @@ def normalize_adjacency_matrix(adj_matrix):
         print(f"⚠️ Warning: Found {isolated_nodes} isolated nodes (degree = 0)")
     
     # Chuẩn hóa: D^(-1/2) * A * D^(-1/2)
-    # Xử lý division by zero - thay thế degree = 0 bằng 1 để tránh warning
     degree_matrix_safe = degree_matrix.copy()
     degree_matrix_safe[degree_matrix_safe == 0] = 1  # Thay thế 0 bằng 1 để tránh division by zero
     

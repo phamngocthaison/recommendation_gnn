@@ -345,9 +345,6 @@ def main():
     try:
         # Bước 1: Load adjacency matrix
         norm_adj = load_adjacency_matrix()
-        
-
-        
         # Bước 3: Load training data
         train_df, train_pairs, val_pairs, num_users, num_items = load_training_data()
         
